@@ -1,4 +1,18 @@
-package wirklich.xyz.duomo;
+/**
+ Copyright 2023, Ralf Ulrich, ralf.m.ulrich@gmail.com
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
+
+package xyz.wirklich.duomo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -21,12 +35,6 @@ public class DuomoController {
 
     private double milanoLong = 9.188540;
     private double milanoLat = 45.464664;
-
-    @GetMapping("/")
-    public String index() {
-
-        return "Greetings from Spring Boot!";
-    }
 
     @RequestMapping(value = "/times", method = RequestMethod.POST, consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

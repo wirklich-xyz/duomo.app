@@ -1,4 +1,4 @@
-package wirklich.xyz.duomo;
+package xyz.wirklich.duomo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
