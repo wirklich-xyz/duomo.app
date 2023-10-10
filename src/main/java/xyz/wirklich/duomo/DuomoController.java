@@ -14,11 +14,9 @@
 
 package xyz.wirklich.duomo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import xyz.wirklich.astro.sun.SolarLocation;
 import xyz.wirklich.astro.time.FractionOfDay;
 import xyz.wirklich.astro.time.JulianDay;
@@ -30,8 +28,8 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
+@EnableWebMvc
 public class DuomoController {
-
 
     private double milanoLong = 9.188540;
     private double milanoLat = 45.464664;
@@ -40,7 +38,9 @@ public class DuomoController {
     @ResponseBody
     public List<DuomoResponse> getDuomoInfo(@RequestBody DuomoRequest input) {
 
+        System.out.println("request: " + input.getYear() + " " + input.getMonth() + " " + input.getDay());
         ZonedDateTime now = timeInMilaon();
+        System.out.println("now: " + now);
         ZonedDateTime inputDate = ZonedDateTime.of(input.getYear(), input.getMonth(), input.getDay(), 0, 0, 0, 0, ZoneId.of("UTC"));
 
         List<DuomoResponse> results = new ArrayList<>();
@@ -74,81 +74,5 @@ public class DuomoController {
         return sl.solarNoon();
     }
 
-    public static class DuomoResponse {
-
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "Europe/Milano")
-        @JsonSerialize(using = ZonedDateTimeSerializer.class)
-        final private ZonedDateTime zenithTimes;
-        final private Double zenithAngles;
-        final private Integer distanceInTime;
-
-        public DuomoResponse(ZonedDateTime zenithTimes, Double zenithAngles, Integer distanceInTime) {
-            this.zenithTimes = zenithTimes;
-            this.zenithAngles = zenithAngles;
-            this.distanceInTime = distanceInTime;
-        }
-
-        public ZonedDateTime getZenithTimes() {
-            return zenithTimes;
-        }
-
-        public Double getZenithAngles() {
-            return zenithAngles;
-        }
-
-        public Integer getDistanceInTime() {
-            return distanceInTime;
-        }
-    }
-
-    public static class DuomoRequest {
-        private double lat;
-        private double lon;
-        private int year;
-        private int month;
-        private int day;
-
-        public int getYear() {
-            return year;
-        }
-
-        public void setYear(int year) {
-            this.year = year;
-        }
-
-        public int getMonth() {
-            return month;
-        }
-
-        public void setMonth(int month) {
-            this.month = month;
-        }
-
-        public int getDay() {
-            return day;
-        }
-
-        public void setDay(int day) {
-            this.day = day;
-        }
-
-        public double getLat() {
-            return lat;
-        }
-
-        public void setLat(double lat) {
-            this.lat = lat;
-        }
-
-        public double getLon() {
-            return lon;
-        }
-
-        public void setLon(double lon) {
-            this.lon = lon;
-        }
-
-        // getters and setters omitted
-    }
 }
 

@@ -6,12 +6,25 @@ package:
 
 provider:
   name: aws
-  runtime: java11
+  runtime: java17
   profile: serverless-admin
   region: eu-central-1
   timeout: 10
   memorySize: 1024
   logRetentionInDays: 7
+#  httpApi:
+#    name: awsApi
+#    cors: true
+
+#provider:
+#  name: aws
+#  runtime: java17
+#  profile: serverless-admin
+#  region: eu-central-1
+#  timeout: 10
+#  memorySize: 1024
+#  logRetentionInDays: 7
+##
 #  iam:
 #    role:
 #      statements:
@@ -24,9 +37,12 @@ provider:
 
 functions:
   duomo-app-api:
-    handler: xyz.wirklich.duomo.StreamLambdaHandler
+    handler: xyz.wirklich.duomo.LambdaHandler::handleRequest
     events:
       - http:
           path: /times
           method: post
     timeout: 30
+
+plugins:
+  - serverless-offline

@@ -17,10 +17,7 @@ public class StreamLambdaHandler implements RequestStreamHandler {
     static {
         try {
             handler = SpringBootLambdaContainerHandler.getAwsProxyHandler(DuomoApplication.class);
-            // If you are using HTTP APIs with the version 2.0 of the proxy model, use the getHttpApiV2ProxyHandler
-            // method: handler = SpringBootLambdaContainerHandler.getHttpApiV2ProxyHandler(Application.class);
         } catch (ContainerInitializationException e) {
-            // if we fail here. We re-throw the exception to force another cold start
             e.printStackTrace();
             throw new RuntimeException("Could not initialize Spring Boot application", e);
         }
@@ -37,6 +34,47 @@ public class StreamLambdaHandler implements RequestStreamHandler {
     @Override
     public void handleRequest(InputStream inputStream, OutputStream outputStream, Context context)
             throws IOException {
+
         handler.proxyStream(inputStream, outputStream, context);
+        outputStream.close();
+
+/*
+            JSONParser parser = new JSONParser();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            JSONObject responseJson = new JSONObject();
+
+            AmazonDynamoDB client = AmazonDynamoDBClientBuilder.defaultClient();
+            DynamoDB dynamoDb = new DynamoDB(client);
+
+            try {
+                JSONObject event = (JSONObject) parser.parse(reader);
+
+                if (event.get("body") != null) {
+                    Person person = new Person((String) event.get("body"));
+
+                    dynamoDb.getTable(DYNAMODB_TABLE_NAME)
+                            .putItem(new PutItemSpec().withItem(new Item().withNumber("id", person.getId())
+                                    .withString("name", person.getName())));
+                }
+
+                JSONObject responseBody = new JSONObject();
+                responseBody.put("message", "New item created");
+
+                JSONObject headerJson = new JSONObject();
+                headerJson.put("x-custom-header", "my custom header value");
+
+                responseJson.put("statusCode", 200);
+                responseJson.put("headers", headerJson);
+                responseJson.put("body", responseBody.toString());
+
+            } catch (ParseException pex) {
+                responseJson.put("statusCode", 400);
+                responseJson.put("exception", pex);
+            }
+
+            OutputStreamWriter writer = new OutputStreamWriter(outputStream, "UTF-8");
+            writer.write(responseJson.toString());
+            writer.close();
+*/
     }
 }

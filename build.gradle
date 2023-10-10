@@ -26,11 +26,11 @@ ext {
 
 assemble.dependsOn = [thinJar, shadowJar]
 
-//configurations {
-//	compileOnly {
-//		extendsFrom annotationProcessor
-//	}
-//}
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
 
 publishing {
 	publications {
@@ -63,10 +63,13 @@ import com.github.jengelman.gradle.plugins.shadow.transformers.*
 //}
 
 shadowJar {
+	//include 'spring.*'
 	archiveClassifier = 'aws'
+	//include "org.springframework.boot.loader.wrapper.ThinJarWrapper"
 //	dependencies {
-	//	exclude(
-	//			dependency("org.springframework.cloud:spring-cloud-function-web:${springCloudFunctionVersion}"))
+//?		'org.springframework.boot.experimental:spring-boot-thin-launcher:1.0.30.RELEASE'
+//		exclude(
+//				dependency ("org.springframework.cloud:spring-cloud-function-web))
 //	}
 	manifest {
 		inheritFrom(project.tasks.thinJar.manifest)
@@ -89,7 +92,7 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-function-adapter-aws'
 	implementation 'org.springframework.cloud:spring-cloud-function-context'
 //	compile ("org.springframework.cloud:spring-cloud-function-adapter-aws:${version}")
-//	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 //	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'xyz.wirklich.astro:astro-time:1.0.5'
 	implementation 'xyz.wirklich.astro:astro-sun:1.0.5'
@@ -102,6 +105,13 @@ dependencies {
 //	annotationProcessor 'org.springframework:spring-context-indexer:6.0.11'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2'
 	testImplementation 'org.hamcrest:hamcrest:2.2'
+
+	//shadow 'org.springframework.boot.experimental:spring-boot-thin-launcher:1.0.30.RELEASE'
+	//shadow 'org.springframework.boot.experimental:spring-boot-thin-wrapper:1.0.30.RELEASE'
+	//shadow 'org.springframework.boot.experimental:spring-boot-thin-wrapper:1.0.30.RELEASE'
+	implementation 'org.springframework.boot.experimental:spring-boot-thin-wrapper:1.0.30.RELEASE'
+
+	testImplementation 'com.amazonaws.serverless:aws-serverless-java-container-core:1.9.1'
 }
 
 dependencyManagement {
